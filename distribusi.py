@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser("""
 
 	""")
 parser.add_argument('-d', '--directory', help="Select which directory to distribute")
+parser.add_argument('-v', '--verbose', help="Print verbose debug output", action="store_true")
 args = parser.parse_args()
 
 if args.directory:
@@ -37,7 +38,11 @@ def div(mime, tag, *values):
 
 for root, dirs, files in os.walk(directory):
 	html = []
+	if args.verbose:
+		print ('Listing', root)
 	for name in files:
+		if args.verbose:
+			print ('Adding', name)
 		if 'index.html' not in name:
 			full_path = os.path.join(root,name)
 			mime = mime_type.from_file(full_path)
@@ -54,7 +59,8 @@ for root, dirs, files in os.walk(directory):
 
 			if mime not in file_types and format not in file_types: #to catch exceptions we haven't defined in file_types before
 				a = "<a href='{}'>{}</a>"
-				# print (mime,format, name)
+				if args.verbose:
+					print ('Unrecognized mime-type: \n', mime,format, name)
 
 			a = a.replace('{}',name)
 			html.append(div(mime,a,name))
@@ -65,7 +71,6 @@ for root, dirs, files in os.walk(directory):
 	for name in dirs:
 		i = os.path.join(root,name)
 		a = "<a href='{}' class='dir'>{}/</a>".replace('{}',name)
-		# print(a)
 		html.append(div('dir',a,'folder'))
 
 
