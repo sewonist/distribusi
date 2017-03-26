@@ -23,8 +23,11 @@ else:
 
 mime_type = magic.Magic(mime=True)
 
-file_types = {'image':'<img class="image" src="{}"></img>', 'pdf':'<a href="{}" class="pdf">{}</a>', 
+file_types = {'image':'<img class="image" src="{}"></img>', 'pdf':'<object data="{}" class="pdf" type="application/pdf"><embed src="{}" type="application/pdf" /></object>', 
 'text':'<a href="{}" class="text">{}</a>', 'video':'<video class="video" controls><source src="{}"></source></video>', 'audio':'<audio controls class="audio"> <source src="{}"></source></audio>','html':'<a href="{}">{}</a>'}
+
+code_types = ['x-c', 'html']
+
 
 def dict_by_value(dictionary, value):
 	return(list(dictionary.keys())[list(dictionary.values()).index(value)]) # returns the key for the given value
@@ -33,6 +36,9 @@ def div(mime, tag, *values):
 	class_name = values[0].split('.')[0].replace(' ', '_')
 	if 'image' in mime:
 		html ='<div class="{}">'.format(class_name)+tag+'</br><span class="filename">{}</span></div>'.format(values[0])
+
+	elif 'pdf' in format:
+		html ='<div class="{}">'.format(class_name)+tag+'</br><class="filename">{}</span></div>'.format(values[0])
 	else:
 		html = '<div class="{}">'.format(class_name)+tag+'</div>'.format(values[0])
 	return html
@@ -52,9 +58,14 @@ for root, dirs, files in os.walk(directory):
 			if args.verbose:
 				print(mime, format)
 
-			if mime in file_types:
-				if name.endswith('.html'):
-					a = open(full_path).read()
+			if mime in file_types: #expansion for different kind of textfiles
+				if mime == 'text':
+					if name.endswith('.html') or name.endswith('.txt'): #what types of text files to expand
+						a = open(full_path).read()
+					elif format in code_types: #if the plain text is code, which types do we wrap in pre-tags?
+						a = "<pre>"+open(full_path).read()+"</pre>"
+					else:
+						a = file_types[mime]
 				else:
 					a = file_types[mime]
 
