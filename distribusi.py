@@ -24,13 +24,14 @@ else:
 mime_type = magic.Magic(mime=True)
 
 file_types = {'image':'<img class="image" src="{}"></img>', 'pdf':'<object data="{}" class="pdf" type="application/pdf"><embed src="{}" type="application/pdf" /></object>', 
-'text':'<a href="{}" class="text">{}</a>', 'video':'<video class="video" controls><source src="{}"></source></video>', 'audio':'<audio controls class="audio"> <source src="{}"></source></audio>','html':'<a href="{}">{}</a>'}
+'text':'<a href="{}" class="text">{}</a>', 'video':'<video class="video" controls><source src="{}"></source></video>', 'audio':'<audio controls class="audio"> <source src="{}"></source></audio>'}
 
 code_types = ['x-c', 'html']
 
 
 def dict_by_value(dictionary, value):
 	return(list(dictionary.keys())[list(dictionary.values()).index(value)]) # returns the key for the given value
+	
 def div(mime, tag, *values):
 	#name, full_path
 	class_name = values[0].split('.')[0].replace(' ', '_')
@@ -94,3 +95,9 @@ for root, dirs, files in os.walk(directory):
 		for line in html:
 			f.write(line+'\n')
 		f.write(html_footer)
+
+
+
+		<pre>
+		iddqd_doom
+		</pre>
