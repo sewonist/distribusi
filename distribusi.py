@@ -20,7 +20,7 @@ else:
 
 mime_type = magic.Magic(mime=True)
 
-file_types = {'image':'<img class="image" src="{}"></img>', 'pdf':'<object data="{}" class="pdf" type="application/pdf"><embed src="{}" type="application/pdf" /></object>', 
+file_types = {'image':'<img class="image" src="{}">', 'pdf':'<object data="{}" class="pdf" type="application/pdf"><embed src="{}" type="application/pdf" /></object>', 
 'text':'<a href="{}" class="text">{}</a>', 'video':'<video class="video" controls><source src="{}"></source></video>', 'audio':'<audio controls class="audio"> <source src="{}"></source></audio>'}
 
 code_types = ['x-c', 'html']
@@ -33,10 +33,10 @@ def div(mime, tag, *values):
 	#name, full_path
 	class_name = values[0].split('.')[0].replace(' ', '_')
 	if 'image' in mime:
-		html ='<div class="{}">'.format(class_name)+tag+'</br><span class="filename">{}</span></div>'.format(values[0])
+		html ='<div class="{}">'.format(class_name)+tag+'<br><span class="filename">{}</span></div>'.format(values[0])
 
 	elif 'pdf' in format:
-		html ='<div class="{}">'.format(class_name)+tag+'</br><class="filename">{}</span></div>'.format(values[0])
+		html ='<div class="{}">'.format(class_name)+tag+'<br><class="filename">{}</span></div>'.format(values[0])
 	else:
 		html = '<div class="{}">'.format(class_name)+tag+'</div>'.format(values[0])
 	return html
