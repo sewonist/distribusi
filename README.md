@@ -5,15 +5,15 @@ distbusi is a content management system for the web that produces static index p
 
 ##installation
 
-distribusi depends on python-magic 0.4+ to do automatic mime (filetype) detection
+distribusi depends on `python-magic` 0.4+ to do automatic mime (filetype) detection
 
 using pip:
-	`sudo pip3 install python-magic`
+	sudo pip3 install python-magic
 
 ##usage
 
 Make a distribusi of your home folder:
-	`python3 distribusi -d ~/`
+	python3 distribusi -d ~/
 
 You will find that you now have an `index.html` in every folder.
 
