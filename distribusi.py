@@ -6,11 +6,8 @@ import os, magic, argparse, sys
 from page_template import *
 
 parser = argparse.ArgumentParser("""
-
-	distribusi is a content management system for the web producing static pages based on the filesystem. It is inspired by the automatic index functions featured in several webservers. As such it uses the file system and directory hierarchy to automatically list all the files in the 
-	directory and providing them with html classes and tags for easy styling.
-
-	""")
+distbusi is a content management system for the web that produces static index pages based on folders in the filesystem. It is inspired by the automatic index functions featured in several web servers. It works by traversing the file system and directory hierarchy to automatically list all the files in the directory and providing them with html classes and tags for easy styling.
+""")
 parser.add_argument('-d', '--directory', help="Select which directory to distribute")
 parser.add_argument('-v', '--verbose', help="Print verbose debug output", action="store_true")
 args = parser.parse_args()
@@ -95,9 +92,3 @@ for root, dirs, files in os.walk(directory):
 		for line in html:
 			f.write(line+'\n')
 		f.write(html_footer)
-
-
-
-		<pre>
-		iddqd_doom
-		</pre>
