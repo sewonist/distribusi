@@ -4,7 +4,7 @@ html_head = """
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!-- Generated with distribusi http://git.homebrewserver.club/distribusi/log.html -->
+        <!-- Generated with distribusi https://git.vvvvvvaria.org/rra/distribusi -->
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <style>
         .image{max-width: 100%;}
