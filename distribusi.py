@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python3 
 # -*- coding: iso-8859-15 -*-
 
 #depends on python-magic 0.4
@@ -13,7 +13,8 @@ parser.add_argument('-v', '--verbose', help="Print verbose debug output", action
 args = parser.parse_args()
 
 if args.directory:
-	print('Generating directory listing for', args.directory)
+	if args.verbose:
+		print('Generating directory listing for', args.directory)
 	directory = args.directory
 else:
 	directory = '.'
