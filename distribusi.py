@@ -13,11 +13,13 @@ distbusi is a content management system for the web that produces static index p
 parser.add_argument('-d', '--directory', help="Select which directory to distribute")
 parser.add_argument('-v', '--verbose', help="Print verbose debug output", action="store_true")
 parser.add_argument('-t', '--thumbnail', help="Generate 150x150 thumbnails for images", action="store_true")
+parser.add_argument('-n', '--no-template', help="Don't use the template to ouput html",action="store_true")
 
 #Todo:
 # build an 'undo' function that traverses the same directories and removes the index.html files
 # set the 'maxdepth'
 # toggle .folders
+# find better way for template handling?
 
 
 args = parser.parse_args()
@@ -51,7 +53,6 @@ def thumbnail(image, name):
 def div(mime, tag, *values):
 	#name, full_path
 	id_name = values[0].split('.')[0].replace(' ', '_')
-	thumbnail = values[1]
 	if 'image' in mime:
 		html = '<div id="{}">'.format(id_name)+tag+'<br><span class="filename">{}</span></div>'.format(values[0]) 
 	elif 'pdf' in format:
@@ -99,7 +100,7 @@ for root, dirs, files in os.walk(directory):
 
 
 			a = a.replace('{}',name)
-			html.append(div(mime,a,name,args.thumbnail))
+			html.append(div(mime,a,name))
 			#html.append(a)
 	if root != directory:
 		html.append('<a href="../">../</a>')
@@ -111,7 +112,9 @@ for root, dirs, files in os.walk(directory):
 
 
 	with open(os.path.join(root,'index.html'),'w') as f:
-		f.write(html_head)
+		if not args.no_template:
+			f.write(html_head)
 		for line in html:
 			f.write(line+'\n')
-		f.write(html_footer)
+		if not args.no_template:
+			f.write(html_footer)
