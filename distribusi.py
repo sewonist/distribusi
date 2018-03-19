@@ -2,19 +2,31 @@
 # -*- coding: iso-8859-15 -*-
 
 #depends on python-magic 0.4
-import os, magic, argparse, sys
+import os, magic, argparse, sys, base64
 from page_template import *
+from PIL import Image 
+from io import BytesIO
 
 parser = argparse.ArgumentParser("""
 distbusi is a content management system for the web that produces static index pages based on folders in the filesystem. It is inspired by the automatic index functions featured in several web servers. It works by traversing the file system and directory hierarchy to automatically list all the files in the directory and providing them with html classes and tags for easy styling.
 """)
 parser.add_argument('-d', '--directory', help="Select which directory to distribute")
 parser.add_argument('-v', '--verbose', help="Print verbose debug output", action="store_true")
+parser.add_argument('-t', '--thumbnail', help="Generate 150x150 thumbnails for images", action="store_true")
+
+#Todo:
+# build an 'undo' function that traverses the same directories and removes the index.html files
+# set the 'maxdepth'
+# toggle .folders
+
+
 args = parser.parse_args()
 
 if args.directory:
 	if args.verbose:
 		print('Generating directory listing for', args.directory)
+	if args.thumbnail:
+		print('Making thumbnails')
 	directory = args.directory
 else:
 	directory = '.'
@@ -26,20 +38,26 @@ file_types = {'image':'<img class="image" src="{}">', 'pdf':'<object data="{}" c
 
 code_types = ['x-c', 'html']
 
+def thumbnail(image, name):
+	size = 450,450
+	im = Image.open(image)
+	im.thumbnail(size)
+	output = BytesIO()
+	im.save(output, format='JPEG')
+	im_data = output.getvalue()
+	data_url = base64.b64encode(im_data).decode()
+	return "<a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a>".format(name, data_url)
 
-def dict_by_value(dictionary, value):
-	return(list(dictionary.keys())[list(dictionary.values()).index(value)]) # returns the key for the given value
-	
 def div(mime, tag, *values):
 	#name, full_path
-	class_name = values[0].split('.')[0].replace(' ', '_')
+	id_name = values[0].split('.')[0].replace(' ', '_')
+	thumbnail = values[1]
 	if 'image' in mime:
-		html ='<div class="{}">'.format(class_name)+tag+'<br><span class="filename">{}</span></div>'.format(values[0])
-
+		html = '<div id="{}">'.format(id_name)+tag+'<br><span class="filename">{}</span></div>'.format(values[0]) 
 	elif 'pdf' in format:
-		html ='<div class="{}">'.format(class_name)+tag+'<br><class="filename">{}</span></div>'.format(values[0])
+		html ='<div id="{}">'.format(id_name)+tag+'<br><class="filename">{}</span></div>'.format(values[0])
 	else:
-		html = '<div class="{}">'.format(class_name)+tag+'</div>'.format(values[0])
+		html = '<div id="{}">'.format(id_name)+tag+'</div>'.format(values[0])
 	return html
 
 for root, dirs, files in os.walk(directory):
@@ -65,6 +83,9 @@ for root, dirs, files in os.walk(directory):
 						a = "<pre>"+open(full_path).read()+"</pre>"
 					else:
 						a = file_types[mime]
+
+				if mime == 'image' and args.thumbnail:
+					a = thumbnail(full_path, name)
 				else:
 					a = file_types[mime]
 
@@ -76,8 +97,9 @@ for root, dirs, files in os.walk(directory):
 				if args.verbose:
 					print ('mime-type not in list, adding as href: \n', mime,format, name)
 
+
 			a = a.replace('{}',name)
-			html.append(div(mime,a,name))
+			html.append(div(mime,a,name,args.thumbnail))
 			#html.append(a)
 	if root != directory:
 		html.append('<a href="../">../</a>')
