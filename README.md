@@ -27,4 +27,8 @@ This creates an `index.html` with `base64` encoded thumbnails
 Generate verbose output:
 	python3 distribusi -v
 
+Make an index of the archive page:
+
+	python3 distribusi -d /var/www/archive/my_event -t -v  
+
 #✌
