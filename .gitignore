@@ -1,4 +1,7 @@
 *.pyc
-index.html
-__pycache__/
+*egg*
 .DS_Store
+__pycache__/
+build/
+dist
+index.html
