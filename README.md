@@ -81,6 +81,8 @@ $ pipenv run distribusi --help
 
 ## Release It
 
+You'll need a [PyPi](https://pypi.org/) account and be added as a maintainer.
+
 ```
 $ make publish
 ```
