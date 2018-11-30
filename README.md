@@ -13,8 +13,8 @@ dependencies. This package requires two underlying packages. Those are
 `python-magic`, and `pillow`. Here are the installation documentation for those
 packages:
 
-* https://github.com/threatstack/libmagic
-* https://pillow.readthedocs.io/en/5.3.x/installation.html#external-libraries
+* [github.com/threatstack/libmagic](https://github.com/threatstack/libmagic)
+* [pillow.readthedocs.io](https://pillow.readthedocs.io/en/5.3.x/installation.html#external-libraries)
 
 ## Installation
 
