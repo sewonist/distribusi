@@ -28,6 +28,16 @@ Using [--user] or [a virtual environment] is recommended:
 $ pip install --user distribusi
 ```
 
+Note: check if the path of your local bin is added to your shell path (otherwise you cannot run distribusi from the shell directly).
+
+To check where distribusi is installed:
+
+    $ find * | grep distribusi 
+
+Add local bin to the $PATH variable:
+
+    $ PATH=$PATH:/home/USERNAME/.local/bin/
+
 ## Usage
 
 Get help with:
