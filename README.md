@@ -78,16 +78,17 @@ $ distribusi -d /var/www/archive/my_event -t -v
 
 ## Change It
 
-Install [Pipenv] and then run:
+You'll need to get a copy of the repository and then do an [editable] install:
 
-[Pipenv]: https://pipenv.readthedocs.io/en/latest/install/#installing-pipenv
+[editable]: https://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode
 
+```bash
+$ git clone https://git.vvvvvvaria.org/varia/distribusi.git && cd distribusi
+$ python3 -m venv .venv && source .venv/bin/activate
+$ pip install -e .
 ```
-$ pipenv install --dev
-$ pipenv run pip install -e .
-$ pipenv run distribusi --help
-```
 
+You're then ready to make your changes and experiment with them.
 
 ## Release It
 
