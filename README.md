@@ -18,14 +18,14 @@ packages:
 * [github.com/threatstack/libmagic](https://github.com/threatstack/libmagic)
 * [pillow.readthedocs.io](https://pillow.readthedocs.io/en/5.3.x/installation.html#external-libraries)
 
-## Installation
+## Install It
 
 ```bash
 $ export PATH=$PATH:$HOME/.local/bin
 $ pip install --user distribusi
 ```
 
-## Usage
+## Use It
 
 Get help with:
 
