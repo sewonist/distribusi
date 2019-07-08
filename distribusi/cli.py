@@ -41,14 +41,14 @@ def build_argparser():
     parser.add_argument(
         '-n',
         '--no-template',
-        help="Don't use the template to ouput html",
+        help="Don't use the template to output html",
         action="store_true"
     )
 
     parser.add_argument(
         '-nf',
         '--no-filenames',
-        help="Don't use the template to ouput html",
+        help="Don't include image filenames",
         action="store_true"
     )
 
