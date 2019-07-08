@@ -1,16 +1,14 @@
 import base64
 import os
+import subprocess
 from io import BytesIO
 
 import magic
-from distribusi.page_template import html_footer, html_head
 from PIL import Image
-import subprocess
 
-CODE_TYPES = [
-    'x-c',
-    'html'
-]
+from distribusi.page_template import html_footer, html_head
+
+CODE_TYPES = ['x-c', 'html']
 
 FILE_TYPES = {
     'image': '<figure><img class="image" src="{}">{}</figure>',
@@ -19,18 +17,13 @@ FILE_TYPES = {
         '<embed src="{}" type="application/pdf" /></object>'
     ),
     'text': '<a href="{}" class="text">{}</a>',
-    'video': (
-        '<video class="video" controls>'
-        '<source src="{}"></source></video>'
-    ),
-    'audio': (
-        '<audio controls class="audio">'
-        '<source src="{}"></source></audio>'
-    ),
+    'video': ('<video class="video" controls>' '<source src="{}"></source></video>'),
+    'audio': ('<audio controls class="audio">' '<source src="{}"></source></audio>'),
 }
 
 
 MIME_TYPE = magic.Magic(mime=True)
+
 
 def caption(image):
     process = subprocess.Popen(['exiftool', '-Comment', image], stdout=subprocess.PIPE)
@@ -40,6 +33,7 @@ def caption(image):
     except:
         caption = ''
     return caption
+
 
 def thumbnail(image, name, args):
     size = (450, 450)
@@ -57,6 +51,7 @@ def thumbnail(image, name, args):
     return (
         "<figure><a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a>{}</figure>"
     ).format(name, data_url, cap)
+
 
 def div(args, mime, tag, *values):
     id_name = values[0].split('.')[0].replace(' ', '_')
@@ -101,7 +96,7 @@ def distribusify(args, directory):  # noqa
                         elif format in CODE_TYPES:
                             # if the plain text is code,
                             # which types do we wrap in pre-tags?
-                            a = "<pre>"+open(full_path).read()+"</pre>"
+                            a = "<pre>" + open(full_path).read() + "</pre>"
                         else:
                             a = FILE_TYPES[mime]
 
@@ -146,7 +141,7 @@ def distribusify(args, directory):  # noqa
                 f.write(styled_html_head)
 
             for line in html:
-                f.write(line+'\n')
+                f.write(line + '\n')
 
             if not args.no_template:
                 f.write(html_footer)
