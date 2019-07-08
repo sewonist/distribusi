@@ -2,7 +2,6 @@ import argparse
 
 from distribusi.distribusi import distribusify
 
-
 def build_argparser():
     parser = argparse.ArgumentParser("""
     distbusi is a content management system for the web that produces static
@@ -17,6 +16,12 @@ def build_argparser():
         '-d',
         '--directory',
         help="Select which directory to distribute"
+    )
+
+    parser.add_argument(
+        '-s',
+        '--style',
+        help="Select a CSS style to include"
     )
 
     parser.add_argument(
@@ -40,12 +45,27 @@ def build_argparser():
         action="store_true"
     )
 
+    parser.add_argument(
+        '-nf',
+        '--no-filenames',
+        help="Don't use the template to ouput html",
+        action="store_true"
+    )
+
+    parser.add_argument(
+        '-c',
+        '--captions',
+        help="Print captions stored in exif metadata",
+        action="store_true"
+    )
+
     return parser
 
 
 def cli_entrypoint():
     parser = build_argparser()
     args = parser.parse_args()
+    directory = '.'
 
     if args.directory:
         if args.verbose:

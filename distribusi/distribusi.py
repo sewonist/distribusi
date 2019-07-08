@@ -5,7 +5,7 @@ from io import BytesIO
 import magic
 from distribusi.page_template import html_footer, html_head
 from PIL import Image
-
+import subprocess
 
 CODE_TYPES = [
     'x-c',
@@ -13,7 +13,7 @@ CODE_TYPES = [
 ]
 
 FILE_TYPES = {
-    'image': '<img class="image" src="{}">',
+    'image': '<figure><img class="image" src="{}">{}</figure>',
     'pdf': (
         '<object data="{}" class="pdf" type="application/pdf">'
         '<embed src="{}" type="application/pdf" /></object>'
@@ -32,8 +32,16 @@ FILE_TYPES = {
 
 MIME_TYPE = magic.Magic(mime=True)
 
+def caption(image):
+    process = subprocess.Popen(['exiftool', '-Comment', image], stdout=subprocess.PIPE)
+    out, err = process.communicate()
+    try:
+        caption = out.decode("utf-8").split(": ", 1)[1]
+    except:
+        caption = ''
+    return caption
 
-def thumbnail(image, name):
+def thumbnail(image, name, args):
     size = (450, 450)
     im = Image.open(image)
     im.thumbnail(size)
@@ -41,19 +49,25 @@ def thumbnail(image, name):
     im.save(output, format='JPEG')
     im_data = output.getvalue()
     data_url = base64.b64encode(im_data).decode()
+    cap = caption(image)
+    if cap and args.captions:
+        cap = "<figcaption>{}</figcaption>".format(cap)
+    else:
+        cap = ''
     return (
-        "<a href='{}'><img class='thumbnail' "
-        "src='data:image/jpg;base64,{}'></a>"
-    ).format(name, data_url)
+        "<figure><a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a>{}</figure>"
+    ).format(name, data_url, cap)
 
-
-def div(mime, tag, *values):
+def div(args, mime, tag, *values):
     id_name = values[0].split('.')[0].replace(' ', '_')
-
+    if not args.no_filenames:
+        filename = '<br><span class="filename">{}</span>'
+    else:
+        filename = ''
     if 'image' in mime:
-        html = '<div id="{}">{}<br><span class="filename">{}</span></div>'
+        html = '<div id="{}">{}' + filename + '</div>'
     elif 'pdf' in mime:
-        html = '<div id="{}">{}<br><class="filename">{}</span></div>'
+        html = '<div id="{}">{}' + filename + '</div>'
     else:
         html = '<div id="{}">{}</div>'
 
@@ -92,9 +106,14 @@ def distribusify(args, directory):  # noqa
                             a = FILE_TYPES[mime]
 
                     if mime == 'image' and args.thumbnail:
-                        a = thumbnail(full_path, name)
+                        a = thumbnail(full_path, name, args)
                     else:
-                        a = FILE_TYPES[mime]
+                        cap = caption(full_path)
+                        if cap and args.captions:
+                            cap = "<figcaption>{}</figcaption>".format(cap)
+                        else:
+                            cap = ''
+                        a = FILE_TYPES[mime].format(full_path, cap)
 
                 if format in FILE_TYPES:
                     a = FILE_TYPES[format]
@@ -107,18 +126,24 @@ def distribusify(args, directory):  # noqa
                         print(message, mime, format, name)
 
                 a = a.replace('{}', name)
-                html.append(div(mime, a, name))
+                html.append(div(args, mime, a, name))
 
         if root != directory:
             html.append('<a href="../">../</a>')
 
         for name in dirs:
             a = "<a href='{}' class='dir'>{}/</a>".replace('{}', name)
-            html.append(div('dir', a, 'folder'))
+            html.append(div(args, 'dir', a, 'folder'))
 
         with open(os.path.join(root, 'index.html'), 'w') as f:
             if not args.no_template:
-                f.write(html_head)
+                if args.style:
+                    fs = open(os.path.join(root, args.style), "r")
+                    style = fs.read()
+                    styled_html_head = html_head % style
+                else:
+                    styled_html_head = html_head % ''
+                f.write(styled_html_head)
 
             for line in html:
                 f.write(line+'\n')
