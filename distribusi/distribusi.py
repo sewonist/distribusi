@@ -138,7 +138,7 @@ def distribusify(args, directory):  # noqa
         with open(os.path.join(root, 'index.html'), 'w') as f:
             if not args.no_template:
                 if args.style:
-                    fs = open(os.path.join(root, args.style), "r")
+                    fs = open(args.style, "r")
                     style = fs.read()
                     styled_html_head = html_head % style
                 else:
