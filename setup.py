@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 dependencies = [
     # pinned because https://github.com/python-pillow/Pillow/issues/2609
     'pillow==4.1',
-    'python-magic',
+    'python-magic==0.4.15',
 ]
 
 with open('README.md', 'r') as handle:
@@ -11,12 +11,12 @@ with open('README.md', 'r') as handle:
 
 setup(
     name='distribusi',
-    version='0.0.3',
-    url='https://git.vvvvvvaria.org/rra/distribusi',
+    version='0.0.4',
+    url='https://git.vvvvvvaria.org/varia/distribusi',
     license='GPLv3',
-    author='rra',
+    author='Varia',
     description=(
-        'distribusi is a content management system for '
+        'Distribusi is a content management system for '
         'the web that produces static pages based on '
         'the file system.'
     ),
