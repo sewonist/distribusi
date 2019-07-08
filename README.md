@@ -25,6 +25,14 @@ $ export PATH=$PATH:$HOME/.local/bin
 $ pip install --user distribusi
 ```
 
+## Upgrade It
+
+If you already have it, you can upgrade with:
+
+```bash
+$ pip install -U distribusi
+```
+
 ## Use It
 
 Get help with:
