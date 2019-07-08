@@ -1,5 +1,7 @@
 # Distribusi CMS
 
+[![PyPI version](https://badge.fury.io/py/distribusi.svg)](https://badge.fury.io/py/distribusi)
+
 `distribusi` is a content management system for the web that produces static
 index pages based on folders in the filesystem. It is inspired by the automatic
 index functions featured in several web servers. It works by traversing the
@@ -18,25 +20,10 @@ packages:
 
 ## Installation
 
-Using [--user] or [a virtual environment] is recommended:
-
-[--user]: https://packaging.python.org/tutorials/installing-packages/#installing-to-the-user-site
-[a virtual environment]: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
-
-
 ```bash
+$ export PATH=$PATH:$HOME/.local/bin
 $ pip install --user distribusi
 ```
-
-Note: check if the path of your local bin is added to your shell path (otherwise you cannot run distribusi from the shell directly).
-
-To check where distribusi is installed:
-
-    $ find * | grep distribusi 
-
-Add local bin to the $PATH variable:
-
-    $ PATH=$PATH:/home/USERNAME/.local/bin/
 
 ## Usage
 
@@ -94,6 +81,9 @@ You're then ready to make your changes and experiment with them.
 
 You'll need a [PyPi](https://pypi.org/) account and to be added as a maintainer.
 
+Please ask around @ Varia for who has PyPi access.
+
 ```
+$ pip install twine
 $ make publish
 ```
