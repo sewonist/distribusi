@@ -7,27 +7,18 @@ import magic
 from PIL import Image
 
 from distribusi.page_template import html_footer, html_head
-
-CODE_TYPES = ['x-c', 'html']
-
-FILE_TYPES = {
-    'image': '<figure><img class="image" src="{}">{}</figure>',
-    'pdf': (
-        '<object data="{}" class="pdf" type="application/pdf">'
-        '<embed src="{}" type="application/pdf" /></object>'
-    ),
-    'text': '<a href="{}" class="text">{}</a>',
-    'video': ('<video class="video" controls>' '<source src="{}"></source></video>'),
-    'audio': ('<audio controls class="audio">' '<source src="{}"></source></audio>'),
-}
-
+from distribusi.mappings import CODE_TYPES, FILE_TYPES
 
 MIME_TYPE = magic.Magic(mime=True)
 
 
 def caption(image):
-    process = subprocess.Popen(['exiftool', '-Comment', image], stdout=subprocess.PIPE)
-    out, err = process.communicate()
+    try:
+        process = subprocess.Popen(['exiftool', '-Comment', image], stdout=subprocess.PIPE)
+        out, err = process.communicate()
+    except Exception as e:
+        print(e)
+        print('Do you have exiftool installed?')
     try:
         caption = out.decode("utf-8").split(": ", 1)[1]
     except:
@@ -36,21 +27,25 @@ def caption(image):
 
 
 def thumbnail(image, name, args):
-    size = (450, 450)
-    im = Image.open(image)
-    im.thumbnail(size)
-    output = BytesIO()
-    im.save(output, format='JPEG')
-    im_data = output.getvalue()
-    data_url = base64.b64encode(im_data).decode()
-    cap = caption(image)
-    if cap and args.captions:
-        cap = "<figcaption>{}</figcaption>".format(cap)
-    else:
-        cap = ''
-    return (
-        "<figure><a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a>{}</figure>"
-    ).format(name, data_url, cap)
+    try:
+        size = (450, 450)
+        im = Image.open(image)
+        im.thumbnail(size)
+        output = BytesIO()
+        im.save(output, format='JPEG')
+        im_data = output.getvalue()
+        data_url = base64.b64encode(im_data).decode()
+        if args.captions:
+            cap = caption(image)
+        else:
+            cap = name
+        return (
+            "<figure><a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a><figcaption>{}</figcaption></figure>"
+        ).format(name, data_url, cap)
+    except Exception as e:
+        print(e)
+        return  "<figure><a href='{}'><img class='thumbnail' src='{}'></a><figcaption>{}</figcaption></figure>".format(name, name,name)
+        
 
 
 def div(args, mime, tag, *values):
@@ -60,7 +55,7 @@ def div(args, mime, tag, *values):
     else:
         filename = ''
     if 'image' in mime:
-        html = '<div id="{}">{}' + filename + '</div>'
+        html = '<div id="{}">{}</div>'
     elif 'pdf' in mime:
         html = '<div id="{}">{}' + filename + '</div>'
     else:
@@ -103,11 +98,10 @@ def distribusify(args, directory):  # noqa
                     if mime == 'image' and args.thumbnail:
                         a = thumbnail(full_path, name, args)
                     else:
-                        cap = caption(full_path)
-                        if cap and args.captions:
-                            cap = "<figcaption>{}</figcaption>".format(cap)
+                        if args.captions:
+                            cap = caption(full_path)
                         else:
-                            cap = ''
+                            cap = name
                         a = FILE_TYPES[mime].format(full_path, cap)
 
                 if format in FILE_TYPES:

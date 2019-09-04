@@ -1,8 +1,6 @@
 from setuptools import find_packages, setup
 
 dependencies = [
-    # pinned because https://github.com/python-pillow/Pillow/issues/2609
-    'pillow==4.1',
     'python-magic==0.4.15',
 ]
 
