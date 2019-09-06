@@ -1,8 +1,6 @@
 from setuptools import find_packages, setup
 
-dependencies = [
-    'python-magic==0.4.15',
-]
+dependencies = ['pillow >= 6.1.0, < 7.0', 'python-magic >= 0.4.15, < 1.0']
 
 with open('README.md', 'r') as handle:
     long_description = handle.read()
