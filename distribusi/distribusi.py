@@ -14,15 +14,17 @@ MIME_TYPE = magic.Magic(mime=True)
 
 def caption(image):
     try:
-        process = subprocess.Popen(['exiftool', '-Comment', image], stdout=subprocess.PIPE)
+        process = subprocess.Popen(
+            ['exiftool', '-Comment', image], stdout=subprocess.PIPE)
         out, err = process.communicate()
     except Exception as e:
         print(e)
         print('Do you have exiftool installed?')
     try:
         caption = out.decode("utf-8").split(": ", 1)[1]
-    except:
+    except Exception as e:
         caption = ''
+        print(e)
     return caption
 
 
@@ -43,9 +45,8 @@ def thumbnail(image, name, args):
             "<figure><a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a><figcaption>{}</figcaption></figure>"
         ).format(name, data_url, cap)
     except Exception as e:
-        print('Thumbnailer:',e)
-        return  "<figure><a href='{}'><img src='{}'></a><figcaption>{}</figcaption></figure>".format(name, name,name)
-        
+        print('Thumbnailer:', e)
+        return "<figure><a href='{}'><img src='{}'></a><figcaption>{}</figcaption></figure>".format(name, name, name)
 
 
 def div(args, type_, subtype, tag, name):
@@ -62,7 +63,7 @@ def div(args, type_, subtype, tag, name):
     elif 'dir' in type_ or 'html' in subtype or 'unkown-file' in subtype:
         html = '<div id="{}" class="{}">{}</div>'
     else:
-        html = '<div id="{}" class="{}">{}' + filename +'</div>'
+        html = '<div id="{}" class="{}">{}' + filename + '</div>'
 
     return html.format(id_name, subtype, tag)
 
@@ -71,7 +72,6 @@ def distribusify(args, directory):  # noqa
     for root, dirs, files in os.walk(directory):
         if not args.remove_index:
             html = []
-              
             if args.verbose:
                 print('Generating directory listing for', root)
 
@@ -80,10 +80,10 @@ def distribusify(args, directory):  # noqa
                     full_path = os.path.join(root, name)
                     mime = MIME_TYPE.from_file(full_path)
                     # example: MIME plain/text becomes 'type' plain 'subtype' text
-                    type_, subtype = mime.split('/')  
+                    type_, subtype = mime.split('/')
 
                     if args.verbose:
-                        print('Found', name,'as', mime)
+                        print('Found', name, 'as', mime)
 
                     if type_ in FILE_TYPES:
                         # expansion for different kind of textfiles
@@ -99,7 +99,7 @@ def distribusify(args, directory):  # noqa
                             else:
                                 subtype = subtype+' unkown-file'
                                 a = "<a href='{}'>{}</a>"
-                                #a = FILE_TYPES[type_]
+                                # a = FILE_TYPES[type_]
 
                         if type_ == 'image':
                             caption = name
@@ -121,7 +121,7 @@ def distribusify(args, directory):  # noqa
                         if args.verbose:
                             message = 'not in list of file types, adding as plain href: \n'
                             print(type_, subtype, message, name)
-                            type_ ='unkown-file'
+                            type_ = 'unkown-file'
                     a = a.replace('{}', name)
                     html.append(div(args, type_, subtype, a, name))
 
@@ -130,7 +130,7 @@ def distribusify(args, directory):  # noqa
 
             for name in dirs:
                 a = "<a href='{}'>{}/</a>".replace('{}', name)
-                html.append(div(args,'dir', 'dir', a, 'folder'))
+                html.append(div(args, 'dir', 'dir', a, 'folder'))
 
             with open(os.path.join(root, 'index.html'), 'w') as f:
                 if not args.no_template:

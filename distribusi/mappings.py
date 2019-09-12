@@ -7,8 +7,8 @@ FILE_TYPES = {
     'audio': ('<audio controls class="audio">' '<source src="{}"></source></audio>'),
 }
 
-SUB_TYPES ={
-	    'pdf': (
-        '<object data="{}" class="pdf" type="application/pdf">'
-        '<embed src="{}" type="application/pdf" /></object>')
+SUB_TYPES = {
+        'pdf': (
+            '<object data="{}" class="pdf" type="application/pdf">'
+            '<embed src="{}" type="application/pdf" /></object>')
 }

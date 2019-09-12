@@ -1,16 +1,17 @@
-import argparse, os
+import argparse
+import os
 
 from distribusi.distribusi import distribusify
+
 
 def build_argparser():
     parser = argparse.ArgumentParser("""
     distbusi is a content management system for the web that produces static
-    index pages based on folders in the files system. It is inspired by the 
-    automatic index functions featured in several popular web servers. It works by
-    traversing the file system and directory hierarchy to automatically list
-    all the files in the directory, detect the file types and providing them with 
-    relevant html classes and tags for easy styling."""
-    )
+    index pages based on folders in the files system.
+    It is inspired by the automatic index functions featured in several popular web
+    servers. distribusi works by traversing the file system and directory hierarchy
+    to automatically list all the files in the directory, detect the file types and
+    providing them with relevant html classes and tags for easy styling.""")
 
     parser.add_argument(
         '-d', '--directory', help="Select which directory to distribute", default="."
@@ -63,5 +64,5 @@ def build_argparser():
 
 def cli_entrypoint():
     parser = build_argparser()
-    args = parser.parse_args()    
+    args = parser.parse_args()
     distribusify(args, args.directory)
