@@ -1,7 +1,6 @@
-import argparse
+import argparse, os
 
 from distribusi.distribusi import distribusify
-
 
 def build_argparser():
     parser = argparse.ArgumentParser("""
@@ -14,7 +13,7 @@ def build_argparser():
     )
 
     parser.add_argument(
-        '-d', '--directory', help="Select which directory to distribute"
+        '-d', '--directory', help="Select which directory to distribute", default="."
     )
 
     parser.add_argument(
@@ -42,32 +41,27 @@ def build_argparser():
     parser.add_argument(
         '-nf',
         '--no-filenames',
-        help="Don't include image file names",
+        help="Don't add file names to listing",
         action="store_true",
     )
 
     parser.add_argument(
         '-c',
         '--captions',
-        help="Print captions stored in exif metadata",
+        help="Adds image captions based on EXIF metadata",
         action="store_true",
     )
+
+    parser.add_argument(
+        '-r',
+        '--remove-index',
+        help="Removes previously made index.html. Warning: this will remove ALL index.html files in the directories listed",
+        action="store_true")
 
     return parser
 
 
 def cli_entrypoint():
     parser = build_argparser()
-    args = parser.parse_args()
-    directory = '.'
-
-    if args.directory:
-        if args.verbose:
-            print('Generating directory listing for', args.directory)
-        if args.thumbnail:
-            print('Making thumbnails')
-            directory = args.directory
-    else:
-        directory = '.'
-
-    distribusify(args, directory)
+    args = parser.parse_args()    
+    distribusify(args, args.directory)
