@@ -105,8 +105,11 @@ def distribusify(args, directory):  # noqa
                             caption = name
                             if args.thumbnail:
                                 a = thumbnail(full_path, name, args)
+                            if args.no_filenames:
+                                caption = ""
                             if args.captions:
                                 caption = caption(full_path)
+
                             a = FILE_TYPES[type_].format(name, caption)
 
                     if subtype in SUB_TYPES:
