@@ -7,7 +7,7 @@ import magic
 from PIL import Image
 
 from distribusi.page_template import html_footer, html_head
-from distribusi.mappings import CODE_TYPES, FILE_TYPES
+from distribusi.mappings import CODE_TYPES, FILE_TYPES, SUB_TYPES
 
 MIME_TYPE = magic.Magic(mime=True)
 
@@ -43,99 +43,113 @@ def thumbnail(image, name, args):
             "<figure><a href='{}'><img class='thumbnail' src='data:image/jpg;base64,{}'></a><figcaption>{}</figcaption></figure>"
         ).format(name, data_url, cap)
     except Exception as e:
-        print(e)
-        return  "<figure><a href='{}'><img class='thumbnail' src='{}'></a><figcaption>{}</figcaption></figure>".format(name, name,name)
+        print('Thumbnailer:',e)
+        return  "<figure><a href='{}'><img src='{}'></a><figcaption>{}</figcaption></figure>".format(name, name,name)
         
 
 
-def div(args, mime, tag, *values):
-    id_name = values[0].split('.')[0].replace(' ', '_')
-    if not args.no_filenames:
-        filename = '<br><span class="filename">{}</span>'
-    else:
+def div(args, type_, subtype, tag, name):
+    id_name = name.split('.')[0].replace(' ', '_')
+    if args.no_filenames:
         filename = ''
-    if 'image' in mime:
-        html = '<div id="{}">{}</div>'
-    elif 'pdf' in mime:
-        html = '<div id="{}">{}' + filename + '</div>'
     else:
-        html = '<div id="{}">{}</div>'
+        filename = '<span class="filename">{}</span>'.format(name)
 
-    return html.format(id_name, tag, values[0])
+    if 'image' in type_:
+        html = '<div id="{}" class="{}">{}</div>'
+    elif 'pdf' in subtype:
+        html = '<div id="{}" class="{}">{}' + filename + '</div>'
+    elif 'dir' in type_ or 'html' in subtype or 'unkown-file' in subtype:
+        html = '<div id="{}" class="{}">{}</div>'
+    else:
+        html = '<div id="{}" class="{}">{}' + filename +'</div>'
+
+    return html.format(id_name, subtype, tag)
 
 
 def distribusify(args, directory):  # noqa
     for root, dirs, files in os.walk(directory):
-        html = []
-
-        if args.verbose:
-            print('Listing', root)
-
-        for name in files:
+        if not args.remove_index:
+            html = []
+              
             if args.verbose:
-                print('Adding', name)
-            if 'index.html' not in name:
-                full_path = os.path.join(root, name)
-                mime = MIME_TYPE.from_file(full_path)
-                mime, format = mime.split('/')  # example: plain text
+                print('Generating directory listing for', root)
 
-                if args.verbose:
-                    print(mime, format)
+            for name in files:
+                if 'index.html' not in name:
+                    full_path = os.path.join(root, name)
+                    mime = MIME_TYPE.from_file(full_path)
+                    # example: MIME plain/text becomes 'type' plain 'subtype' text
+                    type_, subtype = mime.split('/')  
 
-                if mime in FILE_TYPES:
-                    # expansion for different kind of textfiles
-                    if mime == 'text':
-                        if name.endswith('.html') or name.endswith('.txt'):
-                            # what types of text files to expand
-                            a = open(full_path).read()
-                        elif format in CODE_TYPES:
-                            # if the plain text is code,
-                            # which types do we wrap in pre-tags?
-                            a = "<pre>" + open(full_path).read() + "</pre>"
-                        else:
-                            a = FILE_TYPES[mime]
-
-                    if mime == 'image' and args.thumbnail:
-                        a = thumbnail(full_path, name, args)
-                    else:
-                        if args.captions:
-                            cap = caption(full_path)
-                        else:
-                            cap = name
-                        a = FILE_TYPES[mime].format(full_path, cap)
-
-                if format in FILE_TYPES:
-                    a = FILE_TYPES[format]
-
-                if mime not in FILE_TYPES and format not in FILE_TYPES:
-                    # catch exceptions not defined in FILE_TYPES before
-                    a = "<a href='{}'>{}</a>"
                     if args.verbose:
-                        message = 'mime-type not in list, adding as href: \n'
-                        print(message, mime, format, name)
+                        print('Found', name,'as', mime)
 
-                a = a.replace('{}', name)
-                html.append(div(args, mime, a, name))
+                    if type_ in FILE_TYPES:
+                        # expansion for different kind of textfiles
+                        if type_ == 'text':
+                            if name.endswith('.html') or subtype == 'html':
+                                subtype = 'html'
+                                # what types of text files to expand
+                                a = '<section id="{}">{}</section>'.format(name, open(full_path).read())
+                            elif subtype in CODE_TYPES or name.endswith('.txt'):
+                                # if the plain text is code,
+                                # which types do we wrap in pre-tags?
+                                a = "<pre>" + open(full_path).read() + "</pre>"
+                            else:
+                                subtype = subtype+' unkown-file'
+                                a = "<a href='{}'>{}</a>"
+                                #a = FILE_TYPES[type_]
 
-        if root != directory:
-            html.append('<a href="../">../</a>')
+                        if type_ == 'image':
+                            caption = name
+                            if args.thumbnail:
+                                a = thumbnail(full_path, name, args)
+                            if args.captions:
+                                caption = caption(full_path)
+                            a = FILE_TYPES[type_].format(name, caption)
 
-        for name in dirs:
-            a = "<a href='{}' class='dir'>{}/</a>".replace('{}', name)
-            html.append(div(args, 'dir', a, 'folder'))
+                    if subtype in SUB_TYPES:
+                        a = SUB_TYPES[subtype]
 
-        with open(os.path.join(root, 'index.html'), 'w') as f:
-            if not args.no_template:
-                if args.style:
-                    fs = open(args.style, "r")
-                    style = fs.read()
-                    styled_html_head = html_head % style
-                else:
-                    styled_html_head = html_head % ''
-                f.write(styled_html_head)
+                    if type_ not in FILE_TYPES and subtype not in SUB_TYPES:
+                        # catch exceptions not yet defined in FILE_TYPES or SUB_TYPES
+                        a = "<a href='{}'>{}</a>"
+                        if args.verbose:
+                            message = 'not in list of file types, adding as plain href: \n'
+                            print(type_, subtype, message, name)
+                            type_ ='unkown-file'
+                    a = a.replace('{}', name)
+                    html.append(div(args, type_, subtype, a, name))
 
-            for line in html:
-                f.write(line + '\n')
+            if root != directory:
+                html.append('<a href="../">../</a>')
 
-            if not args.no_template:
-                f.write(html_footer)
+            for name in dirs:
+                a = "<a href='{}'>{}/</a>".replace('{}', name)
+                html.append(div(args,'dir', 'dir', a, 'folder'))
+
+            with open(os.path.join(root, 'index.html'), 'w') as f:
+                if not args.no_template:
+                    if args.style:
+                        fs = open(args.style, "r")
+                        style = fs.read()
+                        styled_html_head = html_head % style
+                    else:
+                        styled_html_head = html_head % ''
+                    f.write(styled_html_head)
+
+                for line in html:
+                    f.write(line + '\n')
+
+                if not args.no_template:
+                    f.write(html_footer)
+        if args.remove_index:
+            index = os.path.join(root, 'index.html')
+            if 'index.html' in files:
+                if args.verbose:
+                    print('Removing index.html from', root)
+                try:
+                    os.remove(index)
+                except Exception as e:
+                    print(e)
