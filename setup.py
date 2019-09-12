@@ -1,15 +1,13 @@
 from setuptools import find_packages, setup
 
-dependencies = [
-    'python-magic==0.4.15',
-]
+dependencies = ['pillow >= 6.1.0, < 7.0', 'python-magic >= 0.4.15, < 1.0']
 
 with open('README.md', 'r') as handle:
     long_description = handle.read()
 
 setup(
     name='distribusi',
-    version='0.0.4',
+    version='0.0.5',
     url='https://git.vvvvvvaria.org/varia/distribusi',
     license='GPLv3',
     author='Varia',
