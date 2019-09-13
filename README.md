@@ -18,6 +18,13 @@ packages:
 * [github.com/threatstack/libmagic](https://github.com/threatstack/libmagic)
 * [pillow.readthedocs.io](https://pillow.readthedocs.io/en/5.3.x/installation.html#external-libraries)
 
+### Optional requirements
+
+If you wish to use the `--caption` flag to add image captions read from EXIF comment metadata you will need a utility called `exiftool`.
+
+You can install it via your package manager. For other options please consult the website: [https://www.sno.phy.queensu.ca/~phil/exiftool/](https://www.sno.phy.queensu.ca/~phil/exiftool/)
+
+
 ## Install It
 
 ```bash
