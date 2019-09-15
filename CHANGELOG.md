@@ -3,6 +3,15 @@
 The changelog was only added at version 0.0.4.
 
 
+## 0.0.7
+
+Let's think a bit about safety and robustness:
+
+* distribusi only overwrites (or removes) indexes that have been created by distribusi itself
+* override the above behaviour with `--force`
+* `--exclude` now allows you to exclude folder names from being listed, this behaviour is not influenced by `--force`
+
+
 ## 0.0.6
 
 * Distribusi only prints when called with `--verbose`
