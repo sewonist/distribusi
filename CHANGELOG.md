@@ -2,7 +2,6 @@
 
 The changelog was only added at version 0.0.4.
 
-
 ## 0.0.7
 
 Let's think a bit about safety and robustness:
@@ -11,8 +10,7 @@ Let's think a bit about safety and robustness:
 * override the above behaviour with `--force`
 * `--exclude` now allows you to exclude folder names from being listed, this behaviour is not influenced by `--force`
 
-
-## 0.0.6
+And also some refactoring and niceties:
 
 * Distribusi only prints when called with `--verbose`
 * Restyled `--verbose` output
@@ -20,6 +18,10 @@ Let's think a bit about safety and robustness:
 * .html and .txt files are now expanded and included as snippets in the index file
 * code rewrite for clarity
 * HTML output is more precisely styleable
+
+## 0.0.6
+
+Woops, we missed that one.
 
 ## 0.0.5
 
