@@ -59,6 +59,12 @@ def build_argparser():
         help="Removes previously made index.html. Warning: this will remove ALL index.html files in the directories listed",
         action="store_true")
 
+    parser.add_argument(
+        '-e',
+        '--exclude-directory',
+        help="Exclude one or multiple directories from indexing",
+        nargs="*")
+
     return parser
 
 

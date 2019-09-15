@@ -70,8 +70,17 @@ def div(args, type_, subtype, tag, name):
 
 def distribusify(args, directory):  # noqa
     for root, dirs, files in os.walk(directory):
+
+        if args.exclude_directory:
+            if args.verbose:
+                print('Excluding directory:', ", ".join(args.exclude_directory))
+            dirs[:] = [d for d in dirs if d not in args.exclude_directory]
+            
+
+
         if not args.remove_index:
             html = []
+
             if args.verbose:
                 print('Generating directory listing for', root)
 
@@ -147,6 +156,7 @@ def distribusify(args, directory):  # noqa
 
                 if not args.no_template:
                     f.write(html_footer)
+
         if args.remove_index:
             index = os.path.join(root, 'index.html')
             if 'index.html' in files:
