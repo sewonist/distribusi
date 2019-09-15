@@ -116,18 +116,24 @@ def distribusify(args, directory):  # noqa
             if args.verbose:
                 print('Generating directory listing for', root)
 
-            for name in files:
+            for name in sorted(files):
+
                 if 'index.html' not in name:
                     full_path = os.path.join(root, name)
                     mime = MIME_TYPE.from_file(full_path)
                     # example: MIME plain/text becomes 'type' plain 'subtype' text
                     type_, subtype = mime.split('/')
 
+                    caption = name
+
                     if args.verbose:
                         print('Found', name, 'as', mime)
 
                     if type_ in FILE_TYPES:
-                        # expansion for different kind of textfiles
+                        
+                        a = FILE_TYPES[type_].format(name, caption)
+
+                        # expansion for different kind of text files
                         if type_ == 'text':
                             if name.endswith('.html') or subtype == 'html':
                                 subtype = 'html'
@@ -143,14 +149,12 @@ def distribusify(args, directory):  # noqa
                                 # a = FILE_TYPES[type_]
 
                         if type_ == 'image':
-                            caption = name
                             if args.thumbnail:
                                 a = thumbnail(full_path, name, args)
                             if args.no_filenames:
                                 caption = ""
                             if args.captions:
                                 caption = caption(full_path)
-
                             a = FILE_TYPES[type_].format(name, caption)
 
                     if subtype in SUB_TYPES:
@@ -162,8 +166,10 @@ def distribusify(args, directory):  # noqa
                         if args.verbose:
                             message = 'not in list of file types, adding as plain href: \n'
                             print(type_, subtype, message, name)
-                            type_ = 'unkown-file'
+                            subtype = subtype + ' unkown-file'
+
                     a = a.replace('{}', name)
+
                     html.append(div(args, type_, subtype, a, name))
 
             if root != directory:
@@ -179,8 +185,6 @@ def distribusify(args, directory):  # noqa
                    write_index(args,index,html, html_head, html_footer)
             elif not os.path.exists(index):
                 write_index(args,index,html, html_head, html_footer)
-
-
 
         if args.remove_index:
             index = os.path.join(root, 'index.html')
