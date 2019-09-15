@@ -3,7 +3,8 @@ html_head = """
 <html lang="en">
   <head>
     <!-- Generated with distribusi https://git.vvvvvvaria.org/varia/distribusi -->
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="generator" content="distribusi" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
     <style>
       .image{max-width: 100%%;}
       .pdf object{width:100%%;}

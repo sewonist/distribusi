@@ -49,21 +49,23 @@ def build_argparser():
     parser.add_argument(
         '-c',
         '--captions',
-        help="Adds image captions based on EXIF metadata",
+        help="Adds image captions based on EXIF metadata, requires 'exiftool'",
         action="store_true",
     )
 
     parser.add_argument(
         '-r',
         '--remove-index',
-        help="Removes previously made index.html. Warning: this will remove ALL index.html files in the directories listed",
+        help="Recursively removes all instances of index.html that have been previously made by distribusi",
         action="store_true")
 
     parser.add_argument(
         '-e',
         '--exclude-directory',
         help="Exclude one or multiple directories from indexing",
-        nargs="*")
+        nargs="*",
+        metavar='DIR'
+        )
 
     return parser
 
