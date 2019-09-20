@@ -6,3 +6,5 @@ build/
 dist
 index.html
 pip-wheel-metadata/
+*.pdf
+*.css
