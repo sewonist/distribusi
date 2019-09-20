@@ -2,6 +2,11 @@
 
 The changelog was only added at version 0.0.4.
 
+## 0.0.8
+
+* Allow to ignore hidden directories with `--no-hidden`
+* Files and directories are now sorted during distribusification.
+
 ## 0.0.7
 
 Let's think a bit about safety and robustness:

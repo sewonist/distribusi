@@ -110,6 +110,13 @@ def distribusify(args, directory):  # noqa
                 print('Excluding directory:', ", ".join(args.exclude_directory))
             dirs[:] = [d for d in dirs if d not in args.exclude_directory]
 
+        if args.no_hidden:
+            dirs = list(filter(lambda d: not d.startswith('.'), dirs))
+            files = list(filter(lambda f: not f.startswith('.'), files))
+
+        dirs.sort()
+        files.sort()
+
         if not args.remove_index:
             html = []
 
