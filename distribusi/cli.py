@@ -77,6 +77,11 @@ def build_argparser():
         help="Exclude hidden directories",
         action="store_true")
 
+    parser.add_argument(
+        '--menu-with-index',
+        help="Append index.html to menu items to aid navigation",
+        action="store_true")
+
     return parser
 
 

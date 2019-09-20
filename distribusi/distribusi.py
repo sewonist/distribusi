@@ -183,8 +183,12 @@ def distribusify(args, directory):  # noqa
                 html.append('<a href="../">../</a>')
 
             for name in dirs:
-                a = "<a href='{}'>{}/</a>".replace('{}', name)
-                html.append(div(args, 'dir', 'dir', a, 'folder'))
+                if args.menu_with_index:
+                    a = "<a href='{}/index.html'>{}</a>".replace('{}', name)
+                else:
+                    a = "<a href='{}'>{}/</a>".replace('{}', name)
+
+                html.insert(0, div(args, 'dir', 'dir', a, 'folder'))
 
             index = os.path.join(root, 'index.html')
             if os.path.exists(index):

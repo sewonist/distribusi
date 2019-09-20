@@ -6,6 +6,7 @@ The changelog was only added at version 0.0.4.
 
 * Allow to ignore hidden directories with `--no-hidden`
 * Files and directories are now sorted during distribusification.
+* Allow to append `index.html` to the menu items with `--menu-with-index`
 
 ## 0.0.7
 
