@@ -180,7 +180,10 @@ def distribusify(args, directory):  # noqa
                     html.append(div(args, type_, subtype, a, name))
 
             if root != directory:
-                html.append('<a href="../">../</a>')
+                if args.menu_with_index:
+                    html.append('<a href="../index.html">../</a>')
+                else:
+                    html.append('<a href="../">../</a>')
 
             for name in dirs:
                 if args.menu_with_index:
