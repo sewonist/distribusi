@@ -78,6 +78,13 @@ $ distribusi -d /var/www/archive/my_event -t -v
 
 # ✌
 
+
+## History
+
+Distribusi was first conceptualized as a tool which supported a contribution by Dennis de Bel, Danny van der Kleij and Roel Roscam Abbing to the [ruru house](http://ruruhuis.nl/) organized by [Reinaart Vanhoe](http://vanhoe.org/) and the [ruangrupa](http://ruru.ruangrupa.org/) collective during 2016 Sonsbeek Biennale in Arnhem. During the biennale time the ruru house was a lively meeting place with a programme of discussions, workshops, lectures, culinary activities, performances, pop-up markets and even karaoke evenings, where curators and Arnhemmers met. 
+
+The contribution consisted of setting up distribusi.ruruhuis.nl (distribusi is bahasa Indonesian for 'distribution') which was a website connected to a server in the space. Rather than a hidden administrative interface, the server was present and visible and an invitation was extended to visitors to use it to publish material online. This was done by inserting a USB-drive into any of the ports. The distribusi script would then turn the contents of that stick it into a website. Once the USB-drive was removed that website was no longer on-line. Over time distribusi.ruruhuis.nl hosted photos, books and movies. The website is now off-line but the tool that was used to make it is still used in Varia
+
 ## Change It
 
 You'll need to get a copy of the repository and then do an [editable] install:
