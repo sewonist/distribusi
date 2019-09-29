@@ -6,7 +6,7 @@ from distribusi.distribusi import distribusify
 
 def build_argparser():
     parser = argparse.ArgumentParser("""
-    distbusi is a content management system for the web that produces static
+    distribusi is a content management system for the web that produces static
     index pages based on folders in the files system.
     It is inspired by the automatic index functions featured in several popular web
     servers. distribusi works by traversing the file system and directory hierarchy
