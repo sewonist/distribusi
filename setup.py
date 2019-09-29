@@ -7,7 +7,7 @@ with open('README.md', 'r') as handle:
 
 setup(
     name='distribusi',
-    version='0.0.5',
+    version='0.0.8',
     url='https://git.vvvvvvaria.org/varia/distribusi',
     license='GPLv3',
     author='Varia',
@@ -23,13 +23,6 @@ setup(
     zip_safe=False,
     platforms='any',
     install_requires=dependencies,
-    entry_points={
-        'console_scripts': [
-            'distribusi = distribusi.cli:cli_entrypoint',
-        ],
-    },
-    classifiers=[
-        'Programming Language :: Python :: 3',
-        'Environment :: Console',
-    ],
+    entry_points={'console_scripts': ['distribusi = distribusi.cli:cli_entrypoint']},
+    classifiers=['Programming Language :: Python :: 3', 'Environment :: Console'],
 )
