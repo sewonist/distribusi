@@ -162,7 +162,7 @@ def distribusify(args, directory):  # noqa
                                 caption = ""
                             if args.captions:
                                 caption = caption(full_path)
-                            a = FILE_TYPES[type_].format(name, caption)
+                                a = FILE_TYPES[type_].format(name, caption)
 
                     if subtype in SUB_TYPES:
                         a = SUB_TYPES[subtype]
