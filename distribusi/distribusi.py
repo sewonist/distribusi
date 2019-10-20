@@ -33,6 +33,12 @@ def thumbnail(image, name, args):
         size = (450, 450)
         im = Image.open(image)
         im.thumbnail(size)
+        
+        if (im.mode == 'RGBA'):
+            bg = Image.new('RGBA', im.size, (255,255,255))
+            composite = Image.alpha_composite(bg, im)
+            im=composite.convert('RGB')
+        
         output = BytesIO()
         im.save(output, format='JPEG')
         im_data = output.getvalue()
