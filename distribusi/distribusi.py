@@ -33,6 +33,12 @@ def thumbnail(image, name, args):
         size = (450, 450)
         im = Image.open(image)
         im.thumbnail(size)
+        
+        if (im.mode == 'RGBA'):
+            bg = Image.new('RGBA', im.size, (255,255,255))
+            composite = Image.alpha_composite(bg, im)
+            im=composite.convert('RGB')
+        
         output = BytesIO()
         im.save(output, format='JPEG')
         im_data = output.getvalue()
@@ -162,7 +168,7 @@ def distribusify(args, directory):  # noqa
                                 caption = ""
                             if args.captions:
                                 caption = caption(full_path)
-                            a = FILE_TYPES[type_].format(name, caption)
+                                a = FILE_TYPES[type_].format(name, caption)
 
                     if subtype in SUB_TYPES:
                         a = SUB_TYPES[subtype]
