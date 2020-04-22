@@ -7,7 +7,7 @@ with open('README.md', 'r') as handle:
 
 setup(
     name='distribusi',
-    version='0.0.8',
+    version='0.0.9',
     url='https://git.vvvvvvaria.org/varia/distribusi',
     license='GPLv3',
     author='Varia',
